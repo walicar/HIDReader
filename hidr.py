@@ -16,7 +16,7 @@ def main(vid, pid):
     if not device:
         raise ValueError("Device not found!")
 
-    interface_number = getInterface(device)
+    interface_number = findHID(device)
     # See FAQ about running libusb apps in MacOSX
     if device.is_kernel_driver_active(interface_number):
         try:
@@ -27,8 +27,8 @@ def main(vid, pid):
     usb.util.claim_interface(device, 0)
     signal.signal(signal.SIGINT, handle_interrupt)
 
-    endpoint_address = getEndpoint()
-    report_size = getSize()
+    endpoint_address = 0x84
+    report_size = getSize(device, interface_number)
     while True:
         data = device.read(endpoint_address, report_size, 100)
         displayData(data)
@@ -39,24 +39,23 @@ def findHID(device):
     for cfg in device:
         intf = usb.util.find_descriptor(cfg, bInterfaceClass=0x3)
         if intf is not None:
-            return int.bInterfaceNumber
+            return intf.bInterfaceNumber
     return -1
 
 
-def getInterface(device):
-    print("Implement")
-
-
-def getEndpoint(device):
-    print("Implement")
-
-
-def getSize(device):
-    print("Implement")
-
+def getSize(device, interface_number):
+    intf = None
+    for cfg in device:
+        intf = usb.util.find_descriptor(cfg, bInterfaceNumber=interface_number)
+        if intf is not None:
+            break
+    ep = usb.util.find_descriptor(intf, bEndpointAddress=0x84)
+    if ep is not None:
+        return ep.wMaxPacketSize
+    return -1
 
 def displayData(data):
-    print("Implement")
+    print(data)
 
 
 def search():
