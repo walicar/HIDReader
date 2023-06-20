@@ -28,4 +28,4 @@ if __name__ == "__main__":
     else:
         idVendor = sys.argv[1]
         idProduct = sys.argv[2]
-        main(idVendor, idProduct)
+        main(int(idVendor, 16), int(idProduct, 16))
