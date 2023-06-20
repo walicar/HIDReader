@@ -35,6 +35,14 @@ def main(vid, pid):
         time.sleep(0.3)
 
 
+def findHID(device):
+    for cfg in device:
+        intf = usb.util.find_descriptor(cfg, bInterfaceClass=0x3)
+        if intf is not None:
+            return int.bInterfaceNumber
+    return -1
+
+
 def getInterface(device):
     print("Implement")
 
@@ -52,16 +60,9 @@ def displayData(data):
 
 
 def search():
-    def findHID(device):
-        for cfg in device:
-            intf = usb.util.find_descriptor(cfg, bInterfaceClass = 0x3)
-            if intf is not None:
-                return True
-        return False
-
     print("Searching for HIDs...")
     devices = list(usb.core.find(find_all=True))
-    hids = [device for device in devices if findHID(device)]
+    hids = [device for device in devices if findHID(device) != -1]
 
     if not hids:
         print("No HIDs found!")
@@ -74,8 +75,9 @@ def search():
         name = usb.util.get_string(device, 1) + " " + \
             usb.util.get_string(device, 2)
         print("[%d]>\n name: %s\n idVendor: %s\n idProduct: %s" %
-            (count, name, hex(vid), hex(pid)))
+              (count, name, hex(vid), hex(pid)))
         print("\n")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
