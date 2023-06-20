@@ -52,20 +52,30 @@ def displayData(data):
 
 
 def search():
+    def findHID(device):
+        for cfg in device:
+            intf = usb.util.find_descriptor(cfg, bInterfaceClass = 0x3)
+            if intf is not None:
+                return True
+        return False
+
     print("Searching for HIDs...")
     devices = list(usb.core.find(find_all=True))
-    if not devices:
+    hids = [device for device in devices if findHID(device)]
+
+    if not hids:
         print("No HIDs found!")
 
     text = " HID List "
     print(text.center(50, "="))
-    for count, device in enumerate(devices):
-        name = usb.util.get_string(device, 1) + " " + \
-            usb.util.get_string(device, 2)
+    for count, device in enumerate(hids):
         vid = device.idVendor
         pid = device.idProduct
+        name = usb.util.get_string(device, 1) + " " + \
+            usb.util.get_string(device, 2)
         print("[%d]>\n name: %s\n idVendor: %s\n idProduct: %s" %
             (count, name, hex(vid), hex(pid)))
+        print("\n")
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
