@@ -5,7 +5,7 @@ Easily monitor what HIDs are sending over USB using a simple python script.
 Usecase: I wrote this script to figure out what data my PS4 Controller was sending.
 
 ## Requirements
-- pyusb
+- [pyusb](https://pypi.org/project/pyusb/)
 
 ## Usage
 
