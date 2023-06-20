@@ -4,6 +4,7 @@ import sys
 import signal
 import time
 
+
 def main(vid, pid):
     device = usb.core.find(idVendor=vid, idProduct=pid)
 
@@ -14,9 +15,9 @@ def main(vid, pid):
 
     if not device:
         raise ValueError("Device not found!")
-    
+
     interface_number = getInterface(device)
-    ### See FAQ about running libusb apps in MacOSX
+    # See FAQ about running libusb apps in MacOSX
     if device.is_kernel_driver_active(interface_number):
         try:
             device.detach_kernel_driver(interface_number)
@@ -33,22 +34,38 @@ def main(vid, pid):
         displayData(data)
         time.sleep(0.3)
 
+
 def getInterface(device):
     print("Implement")
+
 
 def getEndpoint(device):
     print("Implement")
 
+
 def getSize(device):
     print("Implement")
+
 
 def displayData(data):
     print("Implement")
 
+
 def search():
-    # basically list all HIDs
-    # NAME, idVendor, idProduct
-    print("Implement")
+    print("Searching for HIDs...")
+    devices = list(usb.core.find(find_all=True))
+    if not devices:
+        print("No HIDs found!")
+
+    text = " HID List "
+    print(text.center(50, "="))
+    for count, device in enumerate(devices):
+        name = usb.util.get_string(device, 1) + " " + \
+            usb.util.get_string(device, 2)
+        vid = device.idVendor
+        pid = device.idProduct
+        print("[%d]>\n name: %s\n idVendor: %s\n idProduct: %s" %
+            (count, name, hex(vid), hex(pid)))
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
