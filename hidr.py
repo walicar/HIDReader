@@ -58,9 +58,8 @@ def getSize(device, interface_number):
 def displayData(data):
     entry_width = len(str(len(data)))
     for count, byte in enumerate(data):
-        count += 1
-        print(f"[{count-1:>{entry_width}}]: ", end="")
-        if count % 4 == 0:
+        print(f"[{count:>{entry_width}}]: ", end="")
+        if (count + 1) % 4 == 0:
             print(f"{byte:>{4}}")
         else:
             print(f"{byte:>{4}}", end =", ")
