@@ -12,6 +12,7 @@ def main(vid, pid):
         print("Cleaning up...")
         usb.util.release_interface(device, 0)
         usb.util.dispose_resources(device)
+        sys.exit(0)
 
     if not device:
         raise ValueError("Device not found!")
