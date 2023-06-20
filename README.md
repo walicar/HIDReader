@@ -11,7 +11,7 @@ Usecase: I wrote this script to figure out what data my PS4 Controller was sendi
 ## Usage
 
 1. Connect your HID to your machine.
-2. Run `sudo python3 hidr.py {vendor_id} {product_id}`
+2. Run `sudo python3 hidr.py 0xffff 0xffff`
 
 If you don't know what your HID's Vendor ID and Product ID are, you can simply run `python3 hidr.py`, and you will find a list of all HIDs connected to your machine, along with their respective Vendor IDs and Product IDs.
 
