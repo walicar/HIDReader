@@ -7,6 +7,8 @@ import time
 
 def main(vid, pid):
     device = usb.core.find(idVendor=vid, idProduct=pid)
+    print(device)
+    print("\n")
 
     def handle_interrupt(signal, frame):
         print("Cleaning up...")
@@ -30,6 +32,8 @@ def main(vid, pid):
 
     endpoint_address = 0x84
     report_size = getSize(device, interface_number)
+    text = " INPUT "
+    print(text.center(50, "="))
     while True:
         data = device.read(endpoint_address, report_size, 100)
         displayData(data)
